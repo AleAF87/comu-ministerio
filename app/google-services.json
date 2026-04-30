@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "694831252762",
+    "firebase_url": "https://comu-ministerio-default-rtdb.firebaseio.com",
+    "project_id": "comu-ministerio",
+    "storage_bucket": "comu-ministerio.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:694831252762:android:8393b4a8531d16256658a3",
+        "android_client_info": {
+          "package_name": "comu.ministerio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "694831252762-b79rgmgbjcd5ess0843v4hglrkdm9ng8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "comu.ministerio",
+            "certificate_hash": "9227e1be1b14e46522a0acc259d1a0527fd70b94"
+          }
+        },
+        {
+          "client_id": "694831252762-5annmm89fqc5majre3qaa2a0ptb07nml.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwXVta2B94i8b1sLSa8d1WStxPJgclFY4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "694831252762-5annmm89fqc5majre3qaa2a0ptb07nml.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

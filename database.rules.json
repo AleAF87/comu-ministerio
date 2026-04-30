@@ -1,0 +1,51 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "ministerios": {
+      ".read": "auth != null",
+      ".write": "auth != null && root.child('gestores').child(auth.uid).child('aprovado').val() === true"
+    },
+    "gestores": {
+      ".read": "auth != null",
+      ".indexOn": ["aprovado", "statusCadastro"],
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('gestores').child(auth.uid).child('aprovado').val() === true)",
+        ".write": "auth != null && (auth.uid === $uid || root.child('gestores').child(auth.uid).child('aprovado').val() === true)"
+      }
+    },
+    "usuarios": {
+      ".read": "auth != null && root.child('gestores').child(auth.uid).child('aprovado').val() === true",
+      ".indexOn": ["aprovado", "statusCadastro"],
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('gestores').child(auth.uid).child('aprovado').val() === true)",
+        ".write": "auth != null && (auth.uid === $uid || root.child('gestores').child(auth.uid).child('aprovado').val() === true)"
+      }
+    },
+    "usuariosOnline": {
+      ".read": "auth != null && root.child('gestores').child(auth.uid).child('aprovado').val() === true",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid && root.child('usuarios').child(auth.uid).child('aprovado').val() === true"
+      }
+    },
+    "mensagens": {
+      ".read": "auth != null && root.child('gestores').child(auth.uid).child('aprovado').val() === true",
+      ".indexOn": ["status", "dataHora"],
+      "$id": {
+        ".write": "auth != null && (root.child('usuarios').child(auth.uid).child('aprovado').val() === true || root.child('gestores').child(auth.uid).child('aprovado').val() === true)"
+      }
+    },
+    "textosRapidos": {
+      ".read": "auth != null && root.child('gestores').child(auth.uid).child('aprovado').val() === true",
+      ".write": "auth != null && root.child('gestores').child(auth.uid).child('aprovado').val() === true"
+    },
+    "acionamentos": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('gestores').child(auth.uid).child('aprovado').val() === true)",
+        "$id": {
+          ".write": "auth != null && (auth.uid === $uid || root.child('gestores').child(auth.uid).child('aprovado').val() === true)"
+        }
+      }
+    }
+  }
+}

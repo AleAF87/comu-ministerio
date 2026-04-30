@@ -1,0 +1,18 @@
+{
+  "appId": "comu.ministerio",
+  "appName": "Comu Ministério",
+  "webDir": "src",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "FirebaseAuthentication": {
+      "providers": ["google.com"],
+      "skipNativeAuth": false
+    },
+    "PushNotifications": {
+      "presentationOptions": ["sound", "alert"]
+    }
+  }
+}

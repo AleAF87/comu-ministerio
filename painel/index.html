@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Comu Ministério | Gestor de Chamados</title>
+  <link rel="icon" type="image/png" href="img/logo.png">
+  <link rel="apple-touch-icon" href="img/logo.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main id="loginView" class="auth-shell">
+    <section class="auth-panel shadow-sm">
+      <span class="brand-mark"><img src="img/logo.png" alt="Comu Ministério"></span>
+      <h1>Gestor de Chamados</h1>
+      <p class="text-secondary mb-4">Acesse com Google para gerenciar mensagens e pessoas online dos ministérios.</p>
+      <div class="d-grid gap-2">
+        <button id="googleLoginBtn" class="btn btn-primary btn-lg w-100">
+          Entrar com Google
+        </button>
+        <button id="googleRegisterBtn" class="btn btn-outline-primary btn-lg w-100">
+          Cadastrar
+        </button>
+      </div>
+      <div id="loginAlert" class="alert mt-3 d-none" role="alert"></div>
+      <p class="small text-secondary mt-3 mb-0">
+        O primeiro gestor é liberado automaticamente. Depois disso, novos gestores precisam de aprovação.
+      </p>
+    </section>
+  </main>
+
+  <main id="registerView" class="login-container public-register-page d-none">
+    <section class="public-register-shell">
+      <div class="text-center mb-4">
+        <div class="brand-mark mx-auto mb-3"><img src="img/logo.png" alt="Comu Ministério"></div>
+        <h1 class="h3 mb-2">Cadastro de Gestor</h1>
+        <p class="text-muted mb-0">Entre com sua conta Google e envie seus dados para aprovação.</p>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header"><h5 class="mb-0">Conta Google</h5></div>
+        <div class="card-body">
+          <div id="googleAccountBox" class="google-account-box">
+            <div>
+              <span class="section-label">Aguardando identificação</span>
+              <p class="mb-0 text-muted">Use o Google para vincular o cadastro a uma conta segura.</p>
+            </div>
+            <button id="registerGoogleAuthBtn" type="button" class="btn btn-primary">
+              <i class="fab fa-google me-2"></i>Entrar com Google
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <form id="gestorSignupForm" novalidate>
+        <fieldset id="gestorSignupFieldset" disabled>
+          <div class="card mb-4">
+            <div class="card-header"><h5 class="mb-0">Dados do gestor</h5></div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-12 col-lg-8">
+                  <label for="cadastroNome" class="form-label">Nome completo</label>
+                  <input id="cadastroNome" name="nome" type="text" class="form-control" autocomplete="name" required>
+                </div>
+                <div class="col-12 col-lg-4">
+                  <label for="cadastroTelefone" class="form-label">Telefone</label>
+                  <input id="cadastroTelefone" name="telefone" type="text" class="form-control" inputmode="numeric" placeholder="(00) 00000-0000" required>
+                </div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="d-flex flex-column flex-md-row gap-3 justify-content-between align-items-md-center">
+          <button id="backToLoginBtn" type="button" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Voltar ao login
+          </button>
+          <button id="submitSignupBtn" type="submit" class="btn btn-primary" disabled>
+            <i class="fas fa-paper-plane me-2"></i>Enviar para aprovação
+          </button>
+        </div>
+      </form>
+
+      <div id="signupAlert" class="alert mt-4 d-none"></div>
+    </section>
+  </main>
+
+  <main id="pendingView" class="auth-shell d-none">
+    <section class="auth-panel shadow-sm">
+      <span class="brand-mark pending"><img src="img/logo.png" alt="Comu Ministério"></span>
+      <h1>Cadastro em análise</h1>
+      <p class="text-secondary">Seu usuário de gestor foi cadastrado e aguarda aprovação.</p>
+      <button id="pendingLogoutBtn" class="btn btn-outline-secondary w-100">Sair</button>
+    </section>
+  </main>
+
+  <main id="dashboardView" class="d-none">
+    <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+      <div class="container-fluid px-3 px-lg-4">
+        <span class="navbar-brand fw-bold">Comu Ministério</span>
+        <div class="d-flex align-items-center gap-2 ms-auto">
+          <button id="enableNotificationsBtn" class="btn btn-warning btn-sm fw-bold notification-cta">Ativar notificações</button>
+          <span id="gestorNome" class="small text-secondary d-none d-md-inline"></span>
+          <button id="logoutBtn" class="btn btn-outline-secondary btn-sm">Sair</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid px-3 px-lg-4 py-4">
+      <div id="notificationsBanner" class="notification-banner mb-4">
+        <div>
+          <strong>Ative as notificações do Windows</strong>
+          <p>Assim o Gestor recebe um aviso mesmo com a tela minimizada ou fora de foco.</p>
+        </div>
+        <button id="bannerNotificationsBtn" class="btn btn-warning fw-bold">Ativar agora</button>
+      </div>
+
+      <ul class="nav nav-pills panel-tabs mb-4" id="panelTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#chamadosTab" type="button">Chamados</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="pill" data-bs-target="#aprovacoesTab" type="button">Aprovações</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="pill" data-bs-target="#ministeriosTab" type="button">Ministérios</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" data-bs-toggle="pill" data-bs-target="#textosRapidosTab" type="button">Textos rápidos</button>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+        <section class="tab-pane fade show active" id="chamadosTab">
+          <section class="section-block mb-4">
+            <div class="section-heading">
+              <div>
+                <h2>Mensagens recebidas</h2>
+                <p>Chamados pendentes aparecem primeiro e atualizam em tempo real.</p>
+              </div>
+              <span id="pendingCount" class="counter-pill">0</span>
+            </div>
+            <div id="mensagensList" class="row g-3"></div>
+            <div id="emptyMensagens" class="empty-state">Nenhuma mensagem pendente agora.</div>
+          </section>
+
+          <div class="row g-4 align-items-stretch">
+            <div class="col-lg-6">
+              <section class="section-block h-100">
+                <div class="section-heading">
+                  <div>
+                    <h2>Pessoas online</h2>
+                    <p>Usuários conectados pelo app, separados por ministério.</p>
+                  </div>
+                  <span id="onlineCount" class="counter-pill online">0</span>
+                </div>
+                <div id="onlineList" class="row g-3"></div>
+                <div id="emptyOnline" class="empty-state">Nenhuma pessoa online no momento.</div>
+              </section>
+            </div>
+
+            <div class="col-lg-6">
+              <section class="section-block h-100">
+                <div class="section-heading">
+                  <div>
+                    <h2>Últimas mensagens</h2>
+                    <p>Histórico recente, colorido de acordo com o ministério.</p>
+                  </div>
+                </div>
+                <div id="ultimasMensagensList" class="vstack gap-3"></div>
+                <div id="emptyUltimasMensagens" class="empty-state">Nenhuma mensagem recebida ainda.</div>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-pane fade" id="aprovacoesTab">
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <section class="section-block h-100">
+                <div class="section-heading">
+                  <div>
+                    <h2>Usuários do app</h2>
+                    <p>Libere membros para acessar os ministérios pelo app.</p>
+                  </div>
+                </div>
+                <div id="usuariosPendentesList" class="vstack gap-3"></div>
+                <div id="emptyUsuariosPendentes" class="empty-state">Nenhum usuário pendente.</div>
+              </section>
+            </div>
+            <div class="col-lg-6">
+              <section class="section-block h-100">
+                <div class="section-heading">
+                  <div>
+                    <h2>Gestores</h2>
+                    <p>Aprove ou bloqueie acessos ao painel web.</p>
+                  </div>
+                </div>
+                <div id="gestoresPendentesList" class="vstack gap-3"></div>
+                <div id="emptyGestoresPendentes" class="empty-state">Nenhum gestor pendente.</div>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section class="tab-pane fade" id="ministeriosTab">
+          <section class="section-block">
+            <div class="section-heading">
+              <div>
+                <h2>Cadastro de ministérios</h2>
+                <p>Os ministérios ficam no nó <code>ministerios</code> do Realtime Database.</p>
+              </div>
+            </div>
+            <form id="ministerioForm" class="row g-2 mb-3">
+              <div class="col-md">
+                <input id="ministerioNomeInput" class="form-control form-control-lg" placeholder="Nome do ministério" required>
+              </div>
+              <div class="col-md-auto">
+                <div class="color-select-wrap">
+                  <span class="color-preview"></span>
+                  <select id="ministerioCorInput" class="form-select form-select-lg" required></select>
+                </div>
+              </div>
+              <div class="col-md-auto">
+                <button class="btn btn-primary btn-lg w-100" type="submit">Adicionar</button>
+              </div>
+            </form>
+            <div id="ministeriosList" class="row g-3"></div>
+          </section>
+        </section>
+
+        <section class="tab-pane fade" id="textosRapidosTab">
+          <section class="section-block">
+            <div class="section-heading">
+              <div>
+                <h2>Textos rápidos</h2>
+                <p>Cadastre mensagens prontas para acionar a vibração de usuários online.</p>
+              </div>
+            </div>
+            <form id="textoRapidoForm" class="row g-2 mb-3">
+              <div class="col-md">
+                <input id="textoRapidoInput" class="form-control form-control-lg" placeholder="Ex.: Favor comparecer à recepção" required>
+              </div>
+              <div class="col-md-auto">
+                <button class="btn btn-primary btn-lg w-100" type="submit">Adicionar</button>
+              </div>
+            </form>
+            <div id="textosRapidosList" class="vstack gap-3"></div>
+            <div id="emptyTextosRapidos" class="empty-state">Nenhum texto rápido cadastrado.</div>
+          </section>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal fade" id="mensagemModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h5 class="modal-title" id="modalMinisterio"></h5>
+            <p class="modal-subtitle mb-0" id="modalUsuario"></p>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <p id="modalTexto" class="message-full"></p>
+          <dl id="modalCriancaInfo" class="row small mb-0 d-none">
+            <dt class="col-5">Numero</dt>
+            <dd class="col-7" id="modalNumeroCrianca"></dd>
+            <dt class="col-5">Criança</dt>
+            <dd class="col-7" id="modalNomeCrianca"></dd>
+          </dl>
+          <p id="modalHorario" class="small text-secondary mt-3 mb-0"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Aguardar</button>
+          <button id="feitoBtn" type="button" class="btn btn-success">Feito</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="acionamentoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h5 class="modal-title">Acionar vibração</h5>
+            <p class="modal-subtitle mb-0" id="acionamentoUsuario"></p>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <label for="acionamentoTextoRapido" class="form-label">Texto rápido</label>
+          <select id="acionamentoTextoRapido" class="form-select mb-3">
+            <option value="">Nenhum texto rápido</option>
+          </select>
+
+          <label for="acionamentoTextoLivre" class="form-label">Mensagem opcional</label>
+          <textarea id="acionamentoTextoLivre" class="form-control" rows="4" placeholder="Digite um complemento, se necessário"></textarea>
+          <div id="acionamentoAlert" class="alert alert-warning mt-3 d-none">Selecione um texto rápido ou digite uma mensagem.</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button id="enviarAcionamentoBtn" type="button" class="btn btn-primary">Enviar vibração</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="notifySound" preload="auto">
+    <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=" type="audio/wav">
+  </audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="js/painel.js"></script>
+</body>
+</html>

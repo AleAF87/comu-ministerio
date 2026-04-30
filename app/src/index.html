@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Comu Ministério</title>
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core@8.4.1/dist/ionic/ionic.esm.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core@8.4.1/css/ionic.bundle.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <ion-app>
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title>Comu Ministério</ion-title>
+        <ion-buttons slot="end">
+          <ion-button id="logoutBtn" class="hidden">Sair</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <button id="persistentAlertCard" class="persistent-alert hidden" type="button">
+        <strong>Mensagem do Gestor</strong>
+        <span id="persistentAlertText">Toque para abrir</span>
+      </button>
+
+      <section id="permissionsBanner" class="permissions-banner hidden">
+        <div>
+          <strong>Permissões necessárias</strong>
+          <p id="permissionsBannerText">Ative as permissões para receber chamados com a tela bloqueada.</p>
+        </div>
+        <div class="permissions-actions">
+          <ion-button id="enablePushPermissionBtn" size="small">Ativar notificações</ion-button>
+          <ion-button id="enableBackgroundPermissionBtn" size="small" fill="outline">Permitir segundo plano</ion-button>
+        </div>
+      </section>
+
+      <section id="loginView" class="screen padded">
+        <div class="app-mark"><img src="assets/logo.png" alt="Comu Ministério"></div>
+        <h1>Comu Ministério</h1>
+        <p>Entre com Google para acessar ou faça seu cadastro para aprovação do Gestor.</p>
+        <ion-button id="googleLoginBtn" expand="block" size="large">Entrar com Google</ion-button>
+        <ion-button id="openRegisterBtn" expand="block" size="large" fill="outline">Cadastrar</ion-button>
+      </section>
+
+      <section id="registerView" class="screen padded hidden">
+        <h1>Cadastro</h1>
+        <p>Vincule sua conta Google e informe seus dados para aprovação.</p>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Conta Google</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div id="googleAccountBox" class="google-account-box">
+              <div>
+                <strong>Aguardando identificação</strong>
+                <p>Use o Google para vincular o cadastro a uma conta segura.</p>
+              </div>
+              <ion-button id="registerGoogleBtn">Entrar com Google</ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-list inset="true">
+          <ion-item>
+            <ion-input id="nomeInput" label="Nome completo" label-placement="stacked" autocomplete="name" disabled="true"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input id="telefoneInput" label="Telefone" label-placement="stacked" inputmode="tel" autocomplete="tel" disabled="true"></ion-input>
+          </ion-item>
+        </ion-list>
+        <ion-button id="saveProfileBtn" expand="block" size="large" disabled="true">Enviar para aprovação</ion-button>
+        <ion-button id="backToLoginBtn" expand="block" fill="clear">Voltar ao login</ion-button>
+      </section>
+
+      <section id="pendingView" class="screen padded hidden">
+      <div class="status-icon"><img src="assets/logo.png" alt="Comu Ministério"></div>
+        <h1>Aguardando aprovação</h1>
+        <p>Seu cadastro foi enviado. Assim que o Gestor aprovar, você poderá entrar no ministério.</p>
+      </section>
+
+      <section id="blockedView" class="screen padded hidden">
+        <div class="status-icon blocked"><img src="assets/logo.png" alt="Comu Ministério"></div>
+        <h1>Acesso bloqueado</h1>
+        <p>Fale com o Gestor de Chamados para regularizar seu cadastro.</p>
+      </section>
+
+      <section id="selectMinisterioView" class="screen padded hidden">
+        <h1>Escolha o ministério</h1>
+        <ion-list inset="true">
+          <ion-item>
+            <ion-select id="ministerioSelect" label="Ministério" label-placement="stacked" interface="popover"></ion-select>
+          </ion-item>
+        </ion-list>
+        <ion-button id="enterBtn" expand="block" size="large">Entrar</ion-button>
+      </section>
+
+      <section id="ministerioView" class="hidden">
+        <div class="ministry-header">
+          <div>
+            <p>Logado em</p>
+            <h1 id="activeMinisterioTitle"></h1>
+          </div>
+          <ion-button id="switchMinisterioBtn" fill="outline" color="light">Trocar</ion-button>
+        </div>
+
+        <div id="messageArea" class="padded hidden">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Enviar mensagem ao Gestor</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-textarea id="mensagemTexto" label="Mensagem" label-placement="stacked" auto-grow="true" rows="5"></ion-textarea>
+              <ion-button id="sendMessageBtn" expand="block" class="ion-margin-top">Enviar</ion-button>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <div id="infantilArea" class="padded hidden">
+          <ion-button id="addChildBtn" expand="block" size="large">Adicionar criança</ion-button>
+          <div id="childrenList" class="children-list"></div>
+        </div>
+
+        <section id="sentPendingSection" class="padded hidden">
+          <h2>Mensagens aguardando o Gestor</h2>
+          <div id="sentPendingList" class="sent-pending-list"></div>
+        </section>
+      </section>
+    </ion-content>
+  </ion-app>
+
+  <ion-modal id="childFormModal">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Adicionar criança</ion-title>
+        <ion-buttons slot="end">
+          <ion-button data-close-child-form>Fechar</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <ion-list inset="true">
+        <ion-item>
+          <ion-input id="childNameInput" label="Nome da criança opcional" label-placement="stacked"></ion-input>
+        </ion-item>
+      </ion-list>
+      <ion-button id="saveChildBtn" expand="block">Adicionar</ion-button>
+    </ion-content>
+  </ion-modal>
+
+  <ion-modal id="callParentsModal">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title id="callParentsTitle">Criança</ion-title>
+        <ion-buttons slot="end">
+          <ion-button data-close-call-modal>Fechar</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <p id="callParentsSubtitle" class="modal-copy"></p>
+      <ion-list inset="true">
+        <ion-item>
+          <ion-textarea id="callParentsMessage" label="Mensagem opcional" label-placement="stacked" auto-grow="true" rows="4"></ion-textarea>
+        </ion-item>
+      </ion-list>
+      <ion-button id="sendCallParentsBtn" expand="block">Enviar ao Gestor</ion-button>
+    </ion-content>
+  </ion-modal>
+
+  <ion-modal id="managerAlertModal" backdrop-dismiss="false">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Mensagem do Gestor</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <div class="manager-alert-body">
+        <p id="managerAlertText"></p>
+        <ion-button id="managerAlertOkBtn" expand="block" size="large">OK</ion-button>
+      </div>
+    </ion-content>
+  </ion-modal>
+
+  <ion-toast id="appToast"></ion-toast>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

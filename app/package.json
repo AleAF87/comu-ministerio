@@ -1,0 +1,30 @@
+{
+  "name": "comu-ministerio-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "npx serve src -l 8100",
+    "dev": "npx serve src -l 8100",
+    "build": "echo \"App web pronto em src\"",
+    "cap:add:android": "npx cap add android",
+    "assets:generate": "npx @capacitor/assets generate --iconBackgroundColor #111827 --splashBackgroundColor #111827",
+    "cap:copy:google-services": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"if (Test-Path 'google-services.json') { New-Item -ItemType Directory -Force -Path 'android/app' | Out-Null; Copy-Item 'google-services.json' 'android/app/google-services.json' -Force; Write-Host 'google-services.json copiado para android/app' } else { Write-Host 'google-services.json não encontrado na raiz do app' }\"",
+    "cap:copy": "npx cap copy",
+    "cap:sync": "npx cap sync",
+    "android:open": "npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.3.1",
+    "@capacitor/app": "^8.0.0",
+    "@capacitor/core": "^8.3.1",
+    "@capacitor/push-notifications": "^8.0.0",
+    "@capacitor-firebase/authentication": "^8.2.0",
+    "@ionic/core": "^8.4.1",
+    "firebase": "^12.12.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.3.1",
+    "serve": "^14.2.3"
+  }
+}
